@@ -1,21 +1,94 @@
 # ExDiff
 
-**TODO: Add description**
+**Get a simple diff of two nested mixed structures**
 
-## Installation
+## Diff
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `ex_diff` to your list of dependencies in `mix.exs`:
+diff is modeled as
+```
+@type t :: %{
+          (String.t()
+           | atom()) => diff()
+        }
 
-```elixir
-def deps do
-  [
-    {:ex_diff, "~> 0.1.0"}
-  ]
-end
+@type diff :: %{
+      removed: [String.t() | atom()],
+      added: [String.t() | atom()],
+      changed: %{
+        (String.t()
+         | atom()) => %{
+          old_value: String.t(),
+          new_value: String.t()
+        }
+      }
+    }
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/ex_diff](https://hexdocs.pm/ex_diff).
+## Usage
 
+Here are some usage examples
+
+diff between one level maps
+```
+ExDiff.diff(
+          %{
+            key_in_both: "old_value",
+            removed_key: "only_in_map_1"
+          },
+          %{
+            key_in_both: "new_value",
+            added_key: "only_in_map_2"
+          }
+        )
+```
+
+diff will be
+```
+%{
+    "root" => %{
+         added: [:added_key],
+         changed: %{
+           key_in_both: %{
+             new_value: "\"new_value\"",
+             old_value: "\"old_value\""
+           }
+         },
+         removed: [:removed_key]
+    }
+}
+```
+---
+diff between nested maps
+```
+ExDiff.diff(
+          %{
+            nested_map: %{
+              key_in_both: "old_value",
+              removed_key: "only_in_map_1"
+            }
+          },
+          %{
+            nested_map: %{
+              key_in_both: "new_value",
+              added_key: "only_in_map_2"
+            }
+          }
+        )
+```
+diff will be
+```
+%{
+   "root" => %{
+     nested_map: %{
+       added: [:added_key],
+       changed: %{
+         key_in_both: %{
+           new_value: "\"new_value\"",
+           old_value: "\"old_value\""
+         }
+       },
+       removed: [:removed_key]
+     }
+   }
+ }
+```

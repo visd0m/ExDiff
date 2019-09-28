@@ -37,13 +37,13 @@ defmodule ExDiffTest do
           },
           %{
             key_in_both: "new_value",
-            added_lkey: "only_in_map_2"
+            added_key: "only_in_map_2"
           }
         )
 
       assert diff == %{
                "root" => %{
-                 added: [:added_lkey],
+                 added: [:added_key],
                  changed: %{
                    key_in_both: %{
                      new_value: "\"new_value\"",
@@ -73,7 +73,7 @@ defmodule ExDiffTest do
           %{
             nested_map: %{
               key_in_both: "new_value",
-              added_lkey: "only_in_map_2"
+              added_key: "only_in_map_2"
             }
           }
         )
@@ -81,7 +81,7 @@ defmodule ExDiffTest do
       assert diff == %{
                "root" => %{
                  nested_map: %{
-                   added: [:added_lkey],
+                   added: [:added_key],
                    changed: %{
                      key_in_both: %{
                        new_value: "\"new_value\"",
@@ -172,7 +172,7 @@ defmodule ExDiffTest do
 
       diff = ExDiff.diff(struct_1, struct_2)
 
-      assert diff = %{}
+      assert diff == %{}
     end
   end
 
@@ -180,7 +180,7 @@ defmodule ExDiffTest do
     test "primitive and map" do
       diff = ExDiff.diff(2, %{a: "a"})
 
-      assert diff = %{
+      assert diff == %{
                changed: %{
                  "root" => %{
                    new_value: "{\"a\":\"a\"}",

@@ -4,7 +4,7 @@
 
 ## Diff
 
-diff is modeled as
+Diff result types
 ```elixir
 @type t :: %{
           (String.t()
@@ -26,11 +26,11 @@ diff is modeled as
 
 ## Usage
 
-Here are some usage examples
+Some usage examples:
 
-diff between one level maps
-```elixir
-ExDiff.diff(
+- One level maps
+    ```elixir
+    ExDiff.diff(
           %{
             key_in_both: "old_value",
             removed_key: "only_in_map_1"
@@ -40,55 +40,71 @@ ExDiff.diff(
             added_key: "only_in_map_2"
           }
         )
-```
-
-diff will be
-```elixir
-%{
-    "root" => %{
-         added: [:added_key],
-         changed: %{
-           key_in_both: %{
-             new_value: "\"new_value\"",
-             old_value: "\"old_value\""
-           }
-         },
-         removed: [:removed_key]
+  
+    ## diff
+  
+    %{
+        "root" => %{
+             added: [:added_key],
+             changed: %{
+               key_in_both: %{
+                 new_value: "\"new_value\"",
+                 old_value: "\"old_value\""
+               }
+             },
+             removed: [:removed_key]
+        }
     }
-}
-```
----
-diff between nested maps
-```elixir
-ExDiff.diff(
-          %{
-            nested_map: %{
-              key_in_both: "old_value",
-              removed_key: "only_in_map_1"
-            }
-          },
-          %{
-            nested_map: %{
-              key_in_both: "new_value",
-              added_key: "only_in_map_2"
-            }
-          }
-        )
-```
-diff will be
-```elixir
-%{
-   "root" => %{
-     nested_map: %{
-       added: [:added_key],
-       changed: %{
-         key_in_both: %{
-           new_value: "\"new_value\"",
-           old_value: "\"old_value\""
+    ```
+- Nested maps
+    ```elixir
+    ExDiff.diff(
+              %{
+                nested_map: %{
+                  key_in_both: "old_value",
+                  removed_key: "only_in_map_1"
+                }
+              },
+              %{
+                nested_map: %{
+                  key_in_both: "new_value",
+                  added_key: "only_in_map_2"
+                }
+              }
+            )
+  
+    ## dif 
+  
+    %{
+         "root" => %{
+           nested_map: %{
+             added: [:added_key],
+             changed: %{
+               key_in_both: %{
+                 new_value: "\"new_value\"",
+                 old_value: "\"old_value\""
+               }
+             },
+             removed: [:removed_key]
+           }
          }
-       },
-       removed: [:removed_key]
-     }
-   }
- }
-```
+    }
+    ```
+ - Lists
+    ```elixir
+    ExDiff.diff([1, 2, 3], [1, 3, 3, 4])
+   
+    ## diff
+    
+    %{
+      "root" => %{
+        added: ["3"],
+        changed: %{"1" => %{new_value: "3", old_value: "2"}}
+      }
+    }
+    ```
+   
+  - Tuples
+    ```elixir
+    
+    ```

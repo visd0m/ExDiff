@@ -24,7 +24,7 @@ defmodule ExDiff do
   def diff(key \\ "root", stuff1, stuff2)
 
   # tuples
-  def diff(key, {} = tuple_1, {} = tuple_2),
+  def diff(key, tuple_1, tuple_2) when is_tuple(tuple_1) and is_tuple(tuple_2),
     do: diff(key, Tuple.to_list(tuple_1), Tuple.to_list(tuple_2))
 
   # struct

@@ -176,6 +176,25 @@ defmodule ExDiffTest do
     end
   end
 
+  describe "tuples" do
+    test "diff on tuples" do
+      diff = ExDiff.diff({1, 2, 3}, {1, 3})
+
+      assert diff == %{
+               "root" => %{
+                 changed: %{"1" => %{new_value: "3", old_value: "2"}},
+                 removed: ["2"]
+               }
+             }
+    end
+
+    test "no diff on tuples" do
+      diff = ExDiff.diff({1, 2}, {1, 2})
+
+      assert diff = %{}
+    end
+  end
+
   describe "different data structures" do
     test "primitive and map" do
       diff = ExDiff.diff(2, %{a: "a"})

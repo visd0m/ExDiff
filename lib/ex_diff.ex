@@ -23,12 +23,18 @@ defmodule ExDiff do
   @spec diff(String.t() | atom(), any, any) :: ExDiff.t()
   def diff(key \\ "root", stuff1, stuff2)
 
+  # tuples
   def diff(key, {} = tuple_1, {} = tuple_2),
     do: diff(key, Tuple.to_list(tuple_1), Tuple.to_list(tuple_2))
 
-  def diff(k, %{__struct__: _} = struct_1, %{__struct__: _} = struct_2),
+  # struct
+  def diff(k, %_{} = struct_1, %_{} = struct_2),
     do: diff(k, Map.from_struct(struct_1), Map.from_struct(struct_2))
 
+  def diff(k, %{} = map_1, %_{} = struct_2), do: diff(k, map_1, Map.from_struct(struct_2))
+  def diff(k, %_{} = struct_1, %{} = map_2), do: diff(k, Map.from_struct(struct_1), map_2)
+
+  # maps
   def diff(key, %{} = map_1, %{} = map_2) do
     diff =
       Enum.concat(
@@ -51,6 +57,7 @@ defmodule ExDiff do
       }
   end
 
+  # lists
   def diff(key, [_ | _] = list_1, [_ | _] = list_2) do
     indexes = 0..max(Enum.count(list_1), Enum.count(list_2))
 
@@ -71,6 +78,7 @@ defmodule ExDiff do
       }
   end
 
+  # un-nested or structurally different values
   def diff(_k, v1, v2) when v1 == v2, do: %{}
   def diff(k, _v1, nil), do: %{removed: [k]}
   def diff(k, nil, _v2), do: %{added: [k]}

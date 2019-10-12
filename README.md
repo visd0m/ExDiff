@@ -5,7 +5,7 @@
 ## Diff
 
 diff is modeled as
-```
+```elixir
 @type t :: %{
           (String.t()
            | atom()) => diff()
@@ -29,7 +29,7 @@ diff is modeled as
 Here are some usage examples
 
 diff between one level maps
-```
+```elixir
 ExDiff.diff(
           %{
             key_in_both: "old_value",
@@ -43,7 +43,7 @@ ExDiff.diff(
 ```
 
 diff will be
-```
+```elixir
 %{
     "root" => %{
          added: [:added_key],
@@ -59,7 +59,7 @@ diff will be
 ```
 ---
 diff between nested maps
-```
+```elixir
 ExDiff.diff(
           %{
             nested_map: %{
@@ -76,7 +76,7 @@ ExDiff.diff(
         )
 ```
 diff will be
-```
+```elixir
 %{
    "root" => %{
      nested_map: %{

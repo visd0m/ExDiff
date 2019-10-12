@@ -106,5 +106,14 @@ Some usage examples:
    
   - Tuples
     ```elixir
+    ExDiff.diff({1, 2, 3}, {1, 3})
     
+    ## diff
+    
+    %{
+      "root" => %{
+        changed: %{"1" => %{new_value: "3", old_value: "2"}},
+        removed: ["2"]
+      }
+    }
     ```
